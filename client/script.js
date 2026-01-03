@@ -8,28 +8,46 @@ const connectionIndicator = document.getElementById("connection-status");
 const messagesContainer = document.getElementById("messages");
 const pairingInput = document.getElementById("pairing-code");
 
-// Initialize Supabase immediately using config
-if (
-  typeof SUPABASE_CONFIG !== "undefined" &&
-  SUPABASE_CONFIG.url &&
-  SUPABASE_CONFIG.key
-) {
-  if (SUPABASE_CONFIG.url.includes("YOUR_SUPABASE")) {
-    showError("Please configure config.js first!");
-  } else {
-    try {
+// Initialize Supabase
+async function init() {
+  try {
+    // Try fetching from Vercel Serverless Function first
+    const response = await fetch("/api/config");
+    if (response.ok) {
+      const config = await response.json();
+      if (config.url && config.key) {
+        supabase = window.supabase.createClient(config.url, config.key);
+        console.log("Supabase initialized via Vercel Env Vars");
+        return;
+      }
+    }
+  } catch (e) {
+    console.log(
+      "Not running on Vercel or API failed, checking local config.js..."
+    );
+  }
+
+  // Fallback to local config.js
+  if (
+    typeof SUPABASE_CONFIG !== "undefined" &&
+    SUPABASE_CONFIG.url &&
+    SUPABASE_CONFIG.key
+  ) {
+    if (!SUPABASE_CONFIG.url.includes("YOUR_SUPABASE")) {
       supabase = window.supabase.createClient(
         SUPABASE_CONFIG.url,
         SUPABASE_CONFIG.key
       );
-    } catch (e) {
-      console.error("Supabase init error:", e);
-      showError("Invalid Supabase Configuration");
+      console.log("Supabase initialized via local config.js");
+    } else {
+      showError("Please configure Supabase credentials");
     }
+  } else {
+    showError("Missing Supabase Configuration");
   }
-} else {
-  showError("Missing config.js or credentials");
 }
+
+init();
 
 // Allow Enter key to submit
 pairingInput.addEventListener("keypress", function (e) {
