@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>AI Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      :root {
+        --bg-color: #121212;
+        --surface-color: #1e1e1e;
+        --primary-color: #bb86fc;
+        --text-color: #e0e0e0;
+        --secondary-text: #a0a0a0;
+        --error-color: #cf6679;
+      }
+
+      body {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      #login-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 20px;
+        text-align: center;
+      }
+
+      #chat-screen {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        color: var(--primary-color);
+      }
+
+      input[type="number"] {
+        background-color: var(--surface-color);
+        border: 1px solid #333;
+        color: var(--text-color);
+        padding: 15px;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        width: 200px;
+        text-align: center;
+        outline: none;
+      }
+
+      input[type="number"]:focus {
+        border-color: var(--primary-color);
+      }
+
+      button {
+        background-color: var(--primary-color);
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        width: 200px;
+      }
+
+      button:active {
+        opacity: 0.8;
+      }
+
+      #status-msg {
+        margin-top: 1rem;
+        color: var(--error-color);
+        min-height: 20px;
+        font-size: 0.9rem;
+      }
+
+      #header {
+        background-color: var(--surface-color);
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #connection-status {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #555;
+        display: inline-block;
+      }
+
+      .connected {
+        background-color: #03dac6 !important;
+      }
+      .disconnected {
+        background-color: #cf6679 !important;
+      }
+
+      #messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .message {
+        background-color: var(--surface-color);
+        padding: 15px;
+        border-radius: 12px;
+        line-height: 1.5;
+        animation: fadeIn 0.3s ease;
+        white-space: pre-wrap; /* Preserve formatting */
+      }
+
+      .timestamp {
+        font-size: 0.75rem;
+        color: var(--secondary-text);
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-color);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 3px;
+      }
+
+      /* Setup Modal */
+      #setup-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      #setup-modal input {
+        width: 80%;
+        max-width: 400px;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Initial Setup for Supabase Credentials -->
+    <div id="setup-modal">
+      <h2>Setup Connection</h2>
+      <p style="color: #aaa; margin-bottom: 20px">Enter Supabase Credentials</p>
+      <input
+        type="text"
+        id="supa-url"
+        placeholder="Supabase URL (https://...supabase.co)"
+      />
+      <input type="text" id="supa-key" placeholder="Supabase Anon Key" />
+      <button onclick="saveCredentials()">Save & Continue</button>
+    </div>
+
+    <div id="login-screen" style="display: none">
+      <h1>AI Assistant Sync</h1>
+      <p style="color: var(--secondary-text); margin-bottom: 20px">
+        Enter the code from your computer
+      </p>
+      <input
+        type="number"
+        id="pairing-code"
+        placeholder="0000"
+        maxlength="4"
+        pattern="\d*"
+      />
+      <button onclick="attemptLogin()">Connect</button>
+      <div id="status-msg"></div>
+    </div>
+
+    <div id="chat-screen">
+      <div id="header">
+        <span style="font-weight: bold">Live Feed</span>
+        <div id="connection-status" title="Disconnected"></div>
+      </div>
+      <div id="messages">
+        <!-- Messages will appear here -->
+        <div
+          style="
+            text-align: center;
+            color: var(--secondary-text);
+            margin-top: 50px;
+            font-style: italic;
+          "
+        >
+          Waiting for AI responses...
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

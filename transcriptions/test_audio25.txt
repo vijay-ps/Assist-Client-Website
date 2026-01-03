@@ -1,0 +1,13 @@
+ Outlook as positive, negative or neutral.
+ Users can filter the list by daily, weekly, monthly and annually.
+ The reason I chose Reddit, Reddit sentiment based shock prediction.
+ This is another project that I created a few years back and to my surprise, it predicted
+ the outcome of certain stocks extremely well.
+ You essentially monitor which stocks are being discussed in the top post and credit on
+ the most accurate stock discussion forums and only extract posts that talk about the future
+ outlook of a particular stock.
+ Chances are if an Outlook is heavily voted, then the prediction is true.
+ You give the context of the posts including the comments to a generative way that extracts
+ the shock name and the Outlook as positive, negative or neutral.
+ Users can filter the list by daily, weekly, monthly and annually.
+ The reason I chose Reddit is because they are quite influential bunch of...

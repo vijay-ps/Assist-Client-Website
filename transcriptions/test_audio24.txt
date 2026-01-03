@@ -1,0 +1,11 @@
+ game where you try to guess a word by some hints. Pretty straightforward to quote and very
+ cool to show off. You can also create spin-offs like doodle-waddle, don't-waddle, evil-waddle,
+ etc. Wrapify. A Spotify rap but anytime you want. Create a slick data-packed experience that
+ shows off listening habit in the most addictive way possible. Go to Spotify for developers and learn
+ how to use their API. The risk is up to your data visualization and UIUX skills. It makes a resume
+ that destroys and makes baddies go nuts. Just make sure to adhere to Spotify's guidelines on
+ handling copyright material or your project will never see the light of the day just like mine.
+ Discord bot. Build a custom Discord bot for my server. I am dying to get one.
+ Okay, but for real, a Discord bot is one of the best beginner projects because you get
+ instant feedback, real users and endless ways to extend it. So you can create a bot that uses
+ NLB to run commands like send a summary to my email or what tasks are pending in my

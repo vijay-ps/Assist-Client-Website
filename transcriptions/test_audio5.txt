@@ -1,0 +1,10 @@
+ and seamless extension. If you want a project that pushes your skills in programming,
+ data stripping and building actual browser extensions, people will use, then this is a killer
+ one to tackle. Find them sort. Just like the sorting hard website from Harry Potter,
+ make a personal test for your favorite franchise. For example, you can create a quiz to predict
+ your name ability from Hunterx Hunter, your emotions from insider or your rules from Valorant.
+ This is probably the best way to learn crowd applications and restful APIs. We have a simple
+ Q&N in the front end and character type processing logic in the back end. To determine category
+ of a user, you can create a tree of FL statements. Or if you're daring enough, create a small
+ mock data set and train a decision tree like random forests on your data. Another idea is to let
+ an LLM like Grog decide your user's fate.

@@ -1,0 +1,14 @@
+pyaudiowpatch
+pyaudiowpatch
+faster-whisper
+ollama
+PyQt6
+numpy
+scipy
+keyboard
+google-genai
+python-dotenv
+fastapi
+uvicorn
+supabase
+python-dotenv
