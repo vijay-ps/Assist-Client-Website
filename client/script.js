@@ -1,7 +1,6 @@
 let supabase = null;
 let currentCode = null;
 
-const setupModal = document.getElementById("setup-modal");
 const loginScreen = document.getElementById("login-screen");
 const chatScreen = document.getElementById("chat-screen");
 const statusMsg = document.getElementById("status-msg");
@@ -9,38 +8,27 @@ const connectionIndicator = document.getElementById("connection-status");
 const messagesContainer = document.getElementById("messages");
 const pairingInput = document.getElementById("pairing-code");
 
-// Check for saved credentials
-const savedUrl = localStorage.getItem("supabase_url");
-const savedKey = localStorage.getItem("supabase_key");
-
-if (savedUrl && savedKey) {
-  initializeSupabase(savedUrl, savedKey);
-}
-
-function saveCredentials() {
-  const url = document.getElementById("supa-url").value.trim();
-  const key = document.getElementById("supa-key").value.trim();
-
-  if (url && key) {
-    localStorage.setItem("supabase_url", url);
-    localStorage.setItem("supabase_key", key);
-    initializeSupabase(url, key);
+// Initialize Supabase immediately using config
+if (
+  typeof SUPABASE_CONFIG !== "undefined" &&
+  SUPABASE_CONFIG.url &&
+  SUPABASE_CONFIG.key
+) {
+  if (SUPABASE_CONFIG.url.includes("YOUR_SUPABASE")) {
+    showError("Please configure config.js first!");
   } else {
-    alert("Please enter both URL and Key");
+    try {
+      supabase = window.supabase.createClient(
+        SUPABASE_CONFIG.url,
+        SUPABASE_CONFIG.key
+      );
+    } catch (e) {
+      console.error("Supabase init error:", e);
+      showError("Invalid Supabase Configuration");
+    }
   }
-}
-
-function initializeSupabase(url, key) {
-  try {
-    supabase = window.supabase.createClient(url, key);
-    setupModal.style.display = "none";
-    loginScreen.style.display = "flex";
-  } catch (e) {
-    console.error("Supabase init error:", e);
-    alert("Invalid credentials configuration");
-    localStorage.clear();
-    location.reload();
-  }
+} else {
+  showError("Missing config.js or credentials");
 }
 
 // Allow Enter key to submit
@@ -51,6 +39,11 @@ pairingInput.addEventListener("keypress", function (e) {
 });
 
 async function attemptLogin() {
+  if (!supabase) {
+    showError("Supabase not initialized. Check config.js");
+    return;
+  }
+
   const code = pairingInput.value;
   if (code.length < 4) {
     showError("Please enter a valid 4-digit code.");

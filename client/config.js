@@ -1,0 +1,6 @@
+// REPLACE THESE WITH YOUR ACTUAL SUPABASE CREDENTIALS
+// The "Anon Key" is safe to expose in the browser.
+const SUPABASE_CONFIG = {
+  url: "YOUR_SUPABASE_URL_HERE",
+  key: "YOUR_SUPABASE_ANON_KEY_HERE",
+};
