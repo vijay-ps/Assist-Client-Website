@@ -10,7 +10,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+
 lib64/
 parts/
 sdist/
@@ -76,3 +76,12 @@ app.log
 Thumbs.db
 
 .vscode
+
+# React / Vite
+client/node_modules
+client/dist
+client/.env.local
+client/.env
+
+# Legacy
+client_legacy/

@@ -1,0 +1,79 @@
+:root {
+  --bg-color: #121212;
+  --surface-color: #1e1e1e;
+  --primary-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --secondary-text: #a0a0a0;
+  --error-color: #cf6679;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+}
+
+input[type="number"] {
+  background-color: var(--surface-color);
+  border: 1px solid #333;
+  color: var(--text-color);
+  padding: 15px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  width: 200px;
+  text-align: center;
+  outline: none;
+}
+
+input[type="number"]:focus {
+  border-color: var(--primary-color);
+}
+
+button {
+  background-color: var(--primary-color);
+  color: #000;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 200px;
+}
+
+button:active {
+  opacity: 0.8;
+}
+
+.status-msg {
+  margin-top: 1rem;
+  color: var(--error-color);
+  min-height: 20px;
+  font-size: 0.9rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
