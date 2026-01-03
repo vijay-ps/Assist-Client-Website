@@ -42,8 +42,8 @@ supabase: Client = None
 pairing_code = None
 
 def init_supabase():
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_KEY")
+    url = os.environ.get("VITE_SUPABASE_URL")
+    key = os.environ.get("VITE_SUPABASE_KEY")
     if not url or not key:
         logger.error("Supabase credentials missing in .env")
         print("\n[ERROR] Supabase credentials missing in .env file!")
